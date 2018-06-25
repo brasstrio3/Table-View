@@ -10,11 +10,19 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    let animals: [String] = ["Horse", "Cow", "Camel", "Sheep", "Goat"]
+    var animals: [animalList] = []
+    
+    struct animalList {
+        var name: String
+        var image: UIImage?
+    }
+    
+    var cat = animalList(name: "Cat", image: UIImage(named: "Cat.jpg"))
     
     let cellReuseIdentifier = "cell"
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var btnDelete: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +31,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        animals.append(cat)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -32,7 +42,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
         
-        cell.textLabel?.text = self.animals[indexPath.row]
+        cell.textLabel?.text = self.animals[0].name[indexPath.row]
         
         return cell
     }
@@ -50,6 +60,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
         }
     }
+    
+    @IBAction func doAddAnimal(_ sender: Any) {
+        let alertController = UIAlertController(title: "New Animal", message: "Please add your new animal below:", preferredStyle:UIAlertControllerStyle.alert)
+        
+        alertController.addTextField(configurationHandler: {(nameField) in
+            nameField.text = ""
+            nameField.placeholder = "Animal Name:"
+            nameField.isSecureTextEntry = false
+        })
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: {[weak alertController] (_) in
+            let nameField = alertController?.textFields![0]
+            let name = nameField?.text
+            self.animals[1].name.append(name!)
+            self.tableView.reloadData()
+        }))
+        present(alertController, animated: true, completion: nil)
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
