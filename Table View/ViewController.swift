@@ -42,7 +42,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
         
-        cell.textLabel?.text = self.animals[0].name[indexPath.row]
+        cell.textLabel?.text = self.animals[indexPath.row].name
         
         return cell
     }
@@ -64,16 +64,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func doAddAnimal(_ sender: Any) {
         let alertController = UIAlertController(title: "New Animal", message: "Please add your new animal below:", preferredStyle:UIAlertControllerStyle.alert)
         
+        //Text Field that pops up
         alertController.addTextField(configurationHandler: {(nameField) in
             nameField.text = ""
             nameField.placeholder = "Animal Name:"
             nameField.isSecureTextEntry = false
         })
         
+        //When ok is clicked
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: {[weak alertController] (_) in
             let nameField = alertController?.textFields![0]
             let name = nameField?.text
-            self.animals[1].name.append(name!)
+            self.animals[0].name.append(name!)
             self.tableView.reloadData()
         }))
         present(alertController, animated: true, completion: nil)
