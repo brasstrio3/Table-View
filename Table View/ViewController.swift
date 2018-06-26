@@ -18,6 +18,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     var cat = animalList(name: "Cat", image: UIImage(named: "Cat.jpg"))
+    var cow = animalList(name: "Cow", image: UIImage(named: "cow.jpg"))
     
     let cellReuseIdentifier = "cell"
     
@@ -33,6 +34,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.dataSource = self
         
         animals.append(cat)
+        animals.append(cow)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -43,6 +45,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell:UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
         
         cell.textLabel?.text = self.animals[indexPath.row].name
+        cell.imageView?.image = self.animals[indexPath.row].image
         
         return cell
     }
@@ -75,7 +78,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: {[weak alertController] (_) in
             let nameField = alertController?.textFields![0]
             let name = nameField?.text
-            self.animals[0].name.append(name!)
+            let imageField = alertController?.textFields![0]
+            let image = imageField?.text
+            var newAnimal = animalList(name: name!, image: UIImage(named: "\(image)"))
+            self.animals.append(newAnimal)
             self.tableView.reloadData()
         }))
         present(alertController, animated: true, completion: nil)
